@@ -1,0 +1,10 @@
+DEFAULT menu.c32
+PROMPT 0
+TIMEOUT 50
+ONTIMEOUT rocky8
+MENU TITLE PXE Boot Menu (BIOS)
+
+LABEL rocky8
+ MENU LABEL Install Rocky 8 (Kickstart)
+ KERNEL images/rocky8/vmlinuz
+ APPEND initrd=images/rocky8/initrd.img inst.ks=http://<KS_IP>/ks/rocky8-std.ks inst.stage2=http://<KS_IP>/rocky8 ip=dhcp
