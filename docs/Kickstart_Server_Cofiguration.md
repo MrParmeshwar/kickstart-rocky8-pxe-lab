@@ -82,14 +82,14 @@ Follow these steps to set up and use the Kickstart server:
    http://192.168.0.126/rocky8/  Note: you have to use your kickstart servers ip  
 
 4. You will see the files like Appstream and BaseOS etc  
-   => AppStream/  
-   => BaseOS/  
-   EFI/  
-   images/  
-   isolinux/  
-   repodata/  
-   media.repo  
-   TRANS.TBL  
+   =>       AppStream/  
+      BaseOS/  
+      EFI/  
+      images/  
+      isolinux/  
+      repodata/  
+      media.repo  
+      TRANS.TBL  
 
 ### Step 4: Install and Configure DHCP Server
 
@@ -103,7 +103,7 @@ max-lease-time 7200;       # Maximum IP lease time
 authoritative;            # Main DHCP server  
 log-facility local7;      # Syslog facility for DHCP logs  
 
-# Used to detect BIOS vs UEFI clients  
+\# Used to detect BIOS vs UEFI clients  
 option architecture-type code 93 = unsigned integer 16;
 
 subnet 192.168.0.0 netmask 255.255.255.0 {  
@@ -115,7 +115,7 @@ subnet 192.168.0.0 netmask 255.255.255.0 {
 
   next-server 192.168.0.126;  # Kickstart server IP  
 
-  # Serve bootloader based on client firmware  
+  \# Serve bootloader based on client firmware  
   if option architecture-type = 00:07 or option architecture-type = 00:09 {  
     filename "grubx64.efi";    # UEFI clients  
   } else {  
@@ -178,21 +178,21 @@ Step 5.1: Copy the GRUB EFI bootloader: cp /boot/efi/EFI/rocky/grubx64.efi /var/
 
 Step 5.2: Create the GRUB configuration file: nano /var/lib/tftpboot/grub.cfg  
 
-# GRUB configuration for PXE booting Rocky Linux 8  
-# This menu entry boots the installer using PXE and Kickstart  
+\# GRUB configuration for PXE booting Rocky Linux 8  
+\# This menu entry boots the installer using PXE and Kickstart  
 
 set timeout=5        # Time (in seconds) before default entry is selected  
 set default=0        # Default menu entry index  
 
 menuentry "Install Rocky Linux 8 (PXE + Kickstart)" {  
 
-    # Kernel image for Rocky Linux installer  
-    linuxefi rocky8/vmlinuz  
+   \# Kernel image for Rocky Linux installer  
+   linuxefi rocky8/vmlinuz  
   ip=dhcp \  
   inst.repo=http://192.168.0.126/rocky8/ \  
   inst.ks=http://192.168.0.126/ks.cfg  
 
-  # Initial RAM disk for installer  
+  \# Initial RAM disk for installer  
   initrdefi rocky8/initrd.img  
 }  
 
@@ -213,7 +213,7 @@ OR
 
 sudo cp /mnt/images/pxeboot/{vmlinuz,initrd.img} /var/lib/tftpboot/  
 
-Step 6: Copy Kernel and Initrd for PXE Boot
+### Step 6: Copy Kernel and Initrd for PXE Boot
 
 1. Mount Rocky ISO again if not already mounted: sudo mount -o loop /Path/to/Rocky-8.x.iso /mnt  
    (If already mounted in Step 3 then please skip this step no need to repeat)  
@@ -221,21 +221,21 @@ Step 6: Copy Kernel and Initrd for PXE Boot
    sudo cp /mnt/images/pxeboot/vmlinuz /var/lib/tftpboot/  
    sudo cp /mnt/images/pxeboot/initrd.img /var/lib/tftpboot/  
 
-Step 7: Firewall Rules for PXE Services
+### Step 7: Firewall Rules for PXE Services
 
 1. Allow TFTP and DHCP in firewall:  
    sudo firewall-cmd --add-service=dhcp --permanent  
    sudo firewall-cmd --add-service=tftp --permanent  
    sudo firewall-cmd --reload  
 
-Step 8: Test PXE Boot
+### Step 8: Test PXE Boot
 
 1. Boot a client machine over network (enable PXE Boot in BIOS/UEFI).  
 2. It should get an IP from DHCP, fetch PXELINUX from TFTP, load the boot menu, and then automatically install using:  
    - Kickstart file – http://192.168.0.126/ks.cfg  
    - Repository – http://192.168.0.126/rocky8/  
 
-Step 9: Boot the Client Machine
+### Step 9: Boot the Client Machine
 
 1. Boot the client system using PXE (Network Boot).  
 2. The client receives an IP address and boot information from the DHCP server.  
@@ -247,11 +247,11 @@ Step 9: Boot the Client Machine
    are already provided via PXE configuration.  
 6. The system installs automatically without any manual intervention.
 
-Step 10: Completion
+### Step 10: Completion
 
 Once installation is complete, the system will reboot into the newly installed OS with all settings applied as per the Kickstart file.
 
-4. Kickstart Installation Workflow (Behind the Scenes)
+## 4. Kickstart Installation Workflow (Behind the Scenes)
 
 1. Client Boots via PXE (Network Boot)
 
@@ -329,7 +329,7 @@ o Example: configure hostname, enable services, custom setup.
 o After reboot, the client has a fresh Rocky Linux installation.  
 o All steps were automated without manual input.
 
-5. Kickstart PXE Installation Workflow (In Short Steps)
+## 5. Kickstart PXE Installation Workflow (In Short Steps)
 
 1. Client boots via PXE and sends a DHCP Discover request.  
 2. DHCP server assigns an IP address and provides TFTP server details along with the bootloader filename  
